@@ -3,7 +3,7 @@ import { perfObservers } from './observeInstances';
 import { IPerformanceObserverType } from '../typings/types';
 
 /**
- * PerformanceObserver 异步订阅封装
+ * Async subscription wrapper around PerformanceObserver
  */
 export const po = (
   eventType: IPerformanceObserverType,
@@ -13,7 +13,7 @@ export const po = (
     const perfObserver = new PerformanceObserver((entryList) => {
       cb(entryList.getEntries());
     });
-    // 订阅时间或者开始计时 buffered不立即执行在内存中留下PerformanceObserver实例
+    // buffered: true replays entries recorded before this observer was created
     perfObserver.observe({ type: eventType, buffered: true });
     return perfObserver;
   } catch (e) {
@@ -21,7 +21,7 @@ export const po = (
   }
   return null;
 };
-//断开测试通道
+// Disconnect and clean up an observer instance
 export const poDisconnect = (observer: any) => {
   if (perfObservers[observer]) {
     perfObservers[observer].disconnect();

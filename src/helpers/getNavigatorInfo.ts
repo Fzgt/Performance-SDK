@@ -4,7 +4,7 @@ import { getIsLowEndDevice, getIsLowEndExperience } from './isLowEnd';
 import { INavigatorInfo } from '../typings/types';
 
 /**
- * 如下信息来源于 window.navigator:
+ * The following information comes from window.navigator:
  * 1. Device Memory
  * 2. Hardware Concurency
  * 3. Status of the service worker:

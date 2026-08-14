@@ -5,14 +5,12 @@ export const initTotalBlockingTime = (
   performanceEntries: IPerformanceEntry[]
 ): void => {
   performanceEntries.forEach((entry) => {
-    //从fcp -> tti获取长耗时任务（self表示耗时长任务来自于渲染帧）
-    // console.log('🍌', entry);
+    // Collect long tasks between FCP and TTI (self = task attributed to the render frame)
     if (entry.name !== 'self' || entry.startTime < fcp.value) {
       return;
     }
-    // console.log('🍌2', entry);
-    //https://developer.mozilla.org/zh-CN/docs/Web/API/Long_Tasks_API
-    //长耗时任务意味着执行时间超过50ms的
+    // https://developer.mozilla.org/en-US/docs/Web/API/Long_Tasks_API
+    // A task counts as "long" once it runs over 50ms
     const blockingTime = entry.duration - 50;
     if (blockingTime > 0) {
       tbt.value += blockingTime;

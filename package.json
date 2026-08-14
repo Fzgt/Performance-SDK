@@ -10,13 +10,20 @@
   "scripts": {
     "build": "microbundle",
     "dev": "microbundle watch",
+    "test": "jest",
     "example:run": "parcel examples/index.html",
     "api:init": "api-extractor init",
     "api:run": "api-extractor run --local --verbose",
     "api:doc": "typedoc --out docs src"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "performance",
+    "web-vitals",
+    "monitoring",
+    "typescript",
+    "sdk"
+  ],
+  "author": "Fzgt",
   "license": "ISC",
   "dependencies": {
     "@microsoft/api-extractor": "^7.12.1",
@@ -24,7 +31,11 @@
     "typedoc": "^0.20.9"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
     "parcel-bundler": "^1.12.4",
+    "ts-jest": "^29.4.12",
     "web-vitals": "^1.1.0"
   }
 }

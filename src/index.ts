@@ -1,8 +1,8 @@
 /**
- * 一款免费的开源性能监控SDK
+ * A free, open-source performance monitoring SDK.
  *
  * @remarks
- * 目前能够完成监控的指标包含FCP等
+ * Currently tracks metrics including FCP and more.
  *
  * @packageDocumentation
  */
@@ -27,19 +27,19 @@ export default class PerfSDK {
   private v = '1.0.0';
   private reportData: IReportData;
   constructor(options: IPerfOptions = {}) {
-    // 扩展基础配置
+    // Extend the base config
     const logUrl = options.logUrl;
     if (!logUrl) {
       throw new Error(`performance-sdk v${this.v}: logUrl is required`);
     }
-    //向后台输送数据
+    // Send data to the backend
     const insReportData = new ReportData({
       logUrl,
     });
     config.reportData = insReportData;
-    //对外暴露上传接口
+    // Expose the reporting interface
     this.reportData = insReportData;
-    //集合数据汇总
+    // Aggregate collected data
     const _analyticsTracker = options.analyticsTracker;
     if (_analyticsTracker) {
       config.analyticsTracker = _analyticsTracker;
@@ -51,20 +51,20 @@ export default class PerfSDK {
     config.maxTime = options.maxMeasureTime || config.maxTime;
 
     if (options.captureError) {
-      //开启错误跟踪
-      const errorTtace = new ErrorTrace();
-      errorTtace.run();
+      // Enable error tracking
+      const errorTrace = new ErrorTrace();
+      errorTrace.run();
     }
 
-    //如果浏览器不支持性能指标只能放弃
+    // Bail out if the browser doesn't support performance metrics
     if (!isPerformanceSupported()) {
       return;
     }
-    //浏览器支持的起FRP这样的Observer统计性能
+    // Use PerformanceObserver-based metrics (FCP, etc.) if supported
     if ('PerformanceObserver' in W) {
       initPerformanceObserver();
     }
-    //初始化
+    // Initialize
     if (typeof D.hidden !== 'undefined') {
       // Opera 12.10 and Firefox 18 and later support
       D.addEventListener(
@@ -72,11 +72,11 @@ export default class PerfSDK {
         didVisibilityChange.bind(this, disconnectPerfObserversHidden)
       );
     }
-    //记录系统DNS请求+白屏时间等
+    // Record DNS lookup, white screen time, and other navigation timings
     logData('navigationTiming', getNavigationTiming());
-    //记录用户的网速 H5+多普勒测速
+    // Record the user's network speed
     logData('networkInformation', getNetworkInformation());
-    //管理离线缓存数据
+    // Manage offline cache usage data
     if (WN && WN.storage && typeof WN.storage.estimate === 'function') {
       WN.storage.estimate().then(reportStorageEstimate);
     }

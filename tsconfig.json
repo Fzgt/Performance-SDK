@@ -11,7 +11,9 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "declarationDir": "./typings"
+    "declarationDir": "./typings",
+    "skipLibCheck": true,
+    "types": []
   },
   "include": ["./src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.spec.ts"]

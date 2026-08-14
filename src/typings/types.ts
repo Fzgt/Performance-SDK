@@ -72,12 +72,11 @@ export interface IReportData {
   sendToAnalytics(level: AskPriority, body: string): void;
 }
 /**
- * @param isResourceTiming - 是否开启资源数据
- * @param isElementTiming - 是否开启性能数据
- * @param analyticsTracker - 最大请求时间
- * @param analyticsTracker - void方法参数IAnalyticsTrackerOptions
- * @param maxTime - 自定义分析工具
- * @interface 系统配置接口
+ * @param isResourceTiming - Whether resource timing capture is enabled
+ * @param isElementTiming - Whether element timing capture is enabled
+ * @param analyticsTracker - Custom analytics consumer, receives IAnalyticsTrackerOptions
+ * @param maxTime - Maximum measurable duration
+ * @interface SDK runtime config interface
  * @public
  */
 export interface IPerfConfig {
@@ -91,7 +90,7 @@ export interface IPerfConfig {
 export interface IPerfObservers {
   [measureName: string]: any;
 }
-//性能指标参数
+// Performance entry types
 export type IPerformanceObserverType =
   | 'first-input'
   | 'largest-contentful-paint'
@@ -102,7 +101,7 @@ export type IPerformanceObserverType =
   | 'paint'
   | 'element'
   | 'resource';
-//性能指标具体请求类型
+// Resource entry initiator types
 export type IPerformanceEntryInitiatorType =
   | 'beacon'
   | 'css'
@@ -124,7 +123,7 @@ export declare interface IPerformanceEntry {
   value?: number;
   identifier?: string;
 }
-//度量指标数据
+// Recorded metric flags
 export interface IMetricMap {
   [measureName: string]: boolean;
 }
@@ -133,7 +132,7 @@ export interface PerformanceEventTiming extends PerformanceEntry {
   processingStart: DOMHighResTimeStamp;
   target?: Node;
 }
-//请求响应优先级
+// Reporting priority
 export enum AskPriority {
   URGENT = 1,
   IDLE = 2,

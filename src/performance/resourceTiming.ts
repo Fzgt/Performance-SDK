@@ -4,9 +4,7 @@ import { rt } from '../data/metrics';
 import { IPerformanceEntry } from '../typings/types';
 
 export const initResourceTiming = (performanceEntries: IPerformanceEntry[]) => {
-  //console.log('🐶', performanceEntries);
   performanceEntries.forEach((entry) => {
-    //console.log('🐶', 1);
     if (config.isResourceTiming) {
       logData('resourceTiming', entry);
     }

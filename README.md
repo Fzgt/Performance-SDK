@@ -55,6 +55,7 @@ Each metric is scored `good` / `needsImprovement` / `poor` via `helpers/vitalsSc
 ```bash
 yarn build          # microbundle, outputs ESM / CJS / UMD
 yarn dev            # watch mode
+yarn test           # jest unit tests
 yarn example:run     # parcel serves examples/index.html
 yarn api:run         # api-extractor generates API report
 yarn api:doc         # typedoc generates docs to docs/

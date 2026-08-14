@@ -13,7 +13,7 @@ export const getNavigationTiming = (): IPerfNavigationTiming => {
   }
   // There is an open issue to type correctly getEntriesByType
   // github.com/microsoft/TypeScript/issues/33866
-  // 这里直接的物理赋值performance.timing 已被弃用
+  // Direct assignment from performance.timing is deprecated, use getEntriesByType instead
   const n = WP.getEntriesByType('navigation')[0] as any;
   // In Safari version 11.2 Navigation Timing isn't supported yet
   if (!n) {
@@ -36,17 +36,17 @@ export const getNavigationTiming = (): IPerfNavigationTiming => {
     timeToFirstByte: responseStart - n.requestStart,
     // HTTP header size
     headerSize: n.transferSize - n.encodedBodySize || 0,
-    //DNS解析时间
+    // DNS lookup time
     dnsLookupTime: n.domainLookupEnd - n.domainLookupStart,
-    //TCP建立时间
+    // TCP connection setup time
     tcpTime: n.connectEnd - n.connectStart || 0,
-    // 白屏时间
+    // White screen time (time to first byte visible to the user)
     whiteTime: n.responseStart - n.navigationStart || 0,
-    //dom渲染完成时间
+    // Time until DOM content is fully parsed
     domTime: n.domContentLoadedEventEnd - n.navigationStart || 0,
-    //页面onload时间
+    // Time until the page's onload fires
     loadTime: n.loadEventEnd - n.navigationStart || 0,
-    //页面解析dom耗时
+    // Time spent parsing the DOM
     parseDomTime: n.domComplete - n.domInteractive || 0,
   };
 };
