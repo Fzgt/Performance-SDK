@@ -7,23 +7,23 @@ import { PerformanceEventTiming } from '../typings/types';
 export const initFirstInputDelay = (
   performanceEntries: PerformanceEventTiming[]
 ) => {
-  //取最后的一位即为我们希望所获取的时间点
+  // The last entry is the one we care about
   const lastEntry = performanceEntries.pop();
   if (lastEntry) {
     // Core Web Vitals FID logic
-    // 测量输入事件的延迟操作
+    // Measure the delay before the input event starts processing
     logMetric(lastEntry.processingStart - lastEntry.startTime, 'fidVitals', {
       performanceEntry: lastEntry,
     });
-    // 传统的FID逻辑
+    // Legacy FID logic
     // Measure the duration of processing the first input event
     logMetric(lastEntry.duration, 'fid', {
       performanceEntry: lastEntry,
     });
   }
-  // 销毁对FID的注册回调 避免过多的观察者造成内存泄露
+  // Disconnect the FID observer once fired, to avoid leaking observers
   poDisconnect(1);
-  //初始化lcp
+  // Report LCP
   logMetric(lcp.value, 'lcp');
   if (perfObservers[3] && typeof perfObservers[3].takeRecords === 'function') {
     perfObservers[3].takeRecords();
@@ -37,7 +37,7 @@ export const initFirstInputDelay = (
   // TBT with 10 second delay after FID
   setTimeout(() => {
     logMetric(tbt.value, `tbt10S`);
-    //FID被激活以后10S的整体数据消耗
+    // Total data consumption 10s after FID fires
     logData('dataConsumption', rt.value);
   }, 10000);
 };

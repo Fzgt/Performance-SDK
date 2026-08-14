@@ -23,7 +23,7 @@ export const rt: { value: IPerfDataConsumption } = {
     xmlhttprequest: 0,
   },
 };
-//主线程总阻塞时间
+// Total main-thread blocking time
 export const tbt = {
   value: 0,
 };

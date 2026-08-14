@@ -13,8 +13,7 @@ export const reportPerf = function (
   customProperties?: object
 ): void {
   pushTask(() => {
-    //console.log('[ measureName ]', measureName);
-    // 当页面被隐藏的时候不报告具体数据
+    // Don't report metrics while the page is hidden
     if (
       (visibility.isHidden && measureName.indexOf('Final') < 0) ||
       !config.analyticsTracker

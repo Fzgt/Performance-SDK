@@ -22,7 +22,7 @@ export const getNetworkInformation = (): IPerfNetworkInformation => {
       saveData: !!dataConnection.saveData,
     };
   } else {
-    //todo 这里我们使用多普勒测速法或者直接用图片探测法
+    // TODO: fall back to a Doppler-style or image-probe speed test
   }
   return {};
 };

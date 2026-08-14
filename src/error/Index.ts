@@ -1,6 +1,6 @@
 import { config } from '../config';
 import { W } from '../data/constants';
-//rrweb引入到了这里
+// rrweb hooks into this module for session replay on error
 import { AskPriority } from '../typings/types';
 type ErrorInfo = {};
 class ErrorTrace {
@@ -8,10 +8,8 @@ class ErrorTrace {
   constructor() {
     this.errordefo = {};
   }
-  //全局捕获同步+异步错误
+  // Capture uncaught sync/async errors globally
   private globalError() {
-    console.log('上报sdk');
-    console.log('[ ❌全局捕获错误 ]');
     W.onerror = (
       eventOrMessage: Event | string,
       scriptURI?: string,
@@ -19,36 +17,33 @@ class ErrorTrace {
       colno?: number,
       error?: Error
     ): boolean => {
-      console.log('[ 我知道错误了 ]', eventOrMessage);
       const errorInfo = JSON.stringify({
         scriptURI,
         lineno,
         colno,
         error,
       });
-      //通过错误信息还原sourcemap源文件地址
-      console.log(errorInfo);
+      // Sourcemap resolution happens on the backend from this info
       config.reportData.sendToAnalytics(AskPriority.IDLE, errorInfo);
       return true;
     };
   }
-  //资源挂载失败 如404png
+  // Resource load failures, e.g. a 404 image
   private networkError() {
     W.addEventListener(
       'error',
       function (e: ErrorEvent) {
         if (e.target !== W) {
-          console.log('🖼网络错误', e.target);
+          // Resource load error
         }
       },
       true
     );
   }
-  //异步Promise错误
+  // Unhandled promise rejections
   private promiseError() {
     W.addEventListener('unhandledrejection', function (e) {
       e.preventDefault();
-      console.log('我知道 promise 的错误了', e.reason);
       return true;
     });
   }
@@ -58,8 +53,7 @@ class ErrorTrace {
       frames[i].addEventListener(
         'error',
         (e) => {
-          console.log('addEventListener');
-          console.log(e);
+          // iframe error
         },
         true
       );
@@ -67,7 +61,7 @@ class ErrorTrace {
       frames[i].addEventListener(
         'unhandledrejection',
         function (e) {
-          console.log('unhandledrejection');
+          // iframe unhandled rejection
         },
         true
       );
@@ -82,9 +76,9 @@ class ErrorTrace {
   // }
   public run() {
     this.networkError();
-    //触发全体数据监听错误
+    // Wire up global sync/async error capture
     this.globalError();
-    //触发promise的错误
+    // Wire up promise rejection capture
     this.promiseError();
   }
 }

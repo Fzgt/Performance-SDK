@@ -4,7 +4,7 @@ export const roundByTwo = (num: number) => {
   return parseFloat(num.toFixed(2));
 };
 
-export const convertToKB = (bytes: number): number | null => {
+export const convertToMB = (bytes: number): number | null => {
   if (typeof bytes !== 'number') {
     return null;
   }
@@ -13,7 +13,7 @@ export const convertToKB = (bytes: number): number | null => {
 
 /**
  * PushTask to requestIdleCallback
- * 高效利用每一帧进行数据的收集
+ * Collects data during idle frames to avoid blocking rendering
  */
 export const pushTask = (cb: any): void => {
   if ('requestIdleCallback' in W) {

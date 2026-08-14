@@ -16,7 +16,7 @@ export const D = document;
 export const WN = (W.navigator as unknown) as Navigator;
 export const WP = W.performance;
 
-//内存
+// Device memory (GB)
 export const getDM = () => WN.deviceMemory ?? 0;
-//cpu核数
+// Logical CPU core count
 export const getHC = () => WN.hardwareConcurrency ?? 0;

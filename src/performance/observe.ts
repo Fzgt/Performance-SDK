@@ -12,13 +12,11 @@ import {
 import { po, poDisconnect } from './performanceObserver';
 import { initResourceTiming } from './resourceTiming';
 export const initPerformanceObserver = (): void => {
-  console.log('⏰ 性能收集开始', Math.random());
   perfObservers[0] = po('paint', initFirstPaint);
   perfObservers[1] = po('first-input', initFirstInputDelay);
   perfObservers[2] = po('largest-contentful-paint', initLargestContentfulPaint);
-  //收集页面全部资源性能数据
+  // Collect all page resource timing data
   if (config.isResourceTiming) {
-    console.log('📚 收集页面性能数据');
     po('resource', initResourceTiming);
   }
   perfObservers[3] = po('layout-shift', initLayoutShift);

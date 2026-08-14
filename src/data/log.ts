@@ -27,7 +27,7 @@ export const logMetric = (
 ): void => {
   const duration2Decimal = roundByTwo(duration);
   if (duration2Decimal <= config.maxTime && duration2Decimal >= 0) {
-    // 从内部或者外部的报告工具报告指标数据
+    // Report the metric via the internal/external reporting pipeline
     reportPerf(measureName, duration2Decimal, customProperties);
   }
 };
