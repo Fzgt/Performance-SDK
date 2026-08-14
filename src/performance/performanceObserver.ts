@@ -17,7 +17,7 @@ export const po = (
     perfObserver.observe({ type: eventType, buffered: true });
     return perfObserver;
   } catch (e) {
-    C.warn('Yideng.js:', e);
+    C.warn('PerfSDK.js:', e);
   }
   return null;
 };

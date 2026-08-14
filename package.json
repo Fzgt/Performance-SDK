@@ -1,12 +1,12 @@
 {
-  "name": "yideng",
+  "name": "performance-sdk",
   "version": "1.0.0",
-  "description": "一款免费的性能监控SDK,我给他取名小石头",
-  "main": "dist/yideng.js",
-  "source": "src/yideng.ts",
-  "module": "dist/yideng.module.js",
+  "description": "A frontend performance monitoring SDK written in TypeScript, capturing Web Vitals and page-load timing breakdowns with prioritised reporting.",
+  "main": "dist/index.js",
+  "source": "src/index.ts",
+  "module": "dist/index.module.js",
   "types": "dist/typings/index.d.ts",
-  "unpkg": "dist/yideng.umd.js",
+  "unpkg": "dist/index.umd.js",
   "scripts": {
     "build": "microbundle",
     "dev": "microbundle watch",

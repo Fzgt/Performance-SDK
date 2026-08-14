@@ -15,22 +15,22 @@ import {
   initPerformanceObserver,
 } from './performance/observe';
 import { isPerformanceSupported } from './tools/isSupported';
-import { IReportData, IYidengOptions } from './typings/types';
+import { IReportData, IPerfOptions } from './typings/types';
 import ErrorTrace from './error';
 import analyticsTracker from './data/analyticsTracker';
-import ReportData from './data/reportData';
+import ReportData from './data/ReportData';
 import { didVisibilityChange } from './helpers/onVisibilityChange';
 import { getNetworkInformation } from './helpers/getNetworkInformation';
 import { reportStorageEstimate } from './data/storageEstimate';
 
-export default class Yideng {
+export default class PerfSDK {
   private v = '1.0.0';
   private reportData: IReportData;
-  constructor(options: IYidengOptions = {}) {
+  constructor(options: IPerfOptions = {}) {
     // 扩展基础配置
     const logUrl = options.logUrl;
     if (!logUrl) {
-      throw new Error(`京程一灯系统监控平台${this.v}提示未传递logUrl`);
+      throw new Error(`performance-sdk v${this.v}: logUrl is required`);
     }
     //向后台输送数据
     const insReportData = new ReportData({
