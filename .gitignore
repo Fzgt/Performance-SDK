@@ -1,1 +1,7 @@
 node_modules
+/dist
+/docs
+/.cache
+/backup
+/typings
+.DS_Store

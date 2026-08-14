@@ -5,8 +5,8 @@ Written in TypeScript. Captures Web Vitals and page-load timing breakdowns with 
 ## Usage
 
 ```ts
-import Yideng from "performance-sdk";
-new Yideng({
+import PerfSDK from "performance-sdk";
+new PerfSDK({
   logUrl: "https://your-backend/log", // required, throws if not provided
   captureError: true, // enable error capture
   resourceTiming: true, // capture resource load timing
