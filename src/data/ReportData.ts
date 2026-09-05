@@ -1,5 +1,5 @@
 import { AskPriority, IReportData } from '../typings/types';
-import { W, WN } from './constants';
+import { C, W, WN } from './constants';
 
 // Reporting transport
 type TrackerOptions = {
@@ -23,7 +23,14 @@ class ReportData implements IReportData {
     }
     if (level == AskPriority.URGENT) {
       if (!!W.fetch) {
-        fetch(logurl, { body, method: 'POST', keepalive: true });
+        // keepalive lets the request outlive the page being unloaded.
+        // Reporting must never surface as an unhandled rejection in the host app.
+        fetch(logurl, {
+          body,
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          keepalive: true,
+        }).catch((e) => C.warn('PerfSDK.js:', e));
       } else {
         let xhr: XMLHttpRequest | null = new XMLHttpRequest();
         xhr.open('post', logurl, true);
@@ -40,7 +47,8 @@ class ReportData implements IReportData {
         navigator.sendBeacon(logurl, body);
       } else {
         let img: HTMLImageElement | null = new Image();
-        img.src = `${logurl}?body=${body}`;
+        // The payload is JSON: without encoding, an `&` or `#` truncates it
+        img.src = `${logurl}?body=${encodeURIComponent(body)}`;
         img.onload = function () {
           // Release the element once the request completes, to avoid leaks
           img = null;

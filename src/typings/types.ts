@@ -69,7 +69,7 @@ export interface IPerfOptions {
   logUrl?: string;
 }
 export interface IReportData {
-  sendToAnalytics(level: AskPriority, body: string): void;
+  sendToAnalytics(level: AskPriority, body: string, uri?: string): void;
 }
 /**
  * @param isResourceTiming - Whether resource timing capture is enabled
@@ -80,7 +80,8 @@ export interface IReportData {
  * @public
  */
 export interface IPerfConfig {
-  reportData: IReportData;
+  // Null until the SDK is constructed with a logUrl
+  reportData: IReportData | null;
   isResourceTiming: boolean;
   isElementTiming: boolean;
   analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;

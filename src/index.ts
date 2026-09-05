@@ -7,7 +7,7 @@
  * @packageDocumentation
  */
 import { config } from './config';
-import { D, W, WN, WP } from './data/constants';
+import { D, W, WN } from './data/constants';
 import { logData } from './data/log';
 import { getNavigationTiming } from './performance/getNavigationTiming';
 import {
@@ -25,7 +25,10 @@ import { reportStorageEstimate } from './data/storageEstimate';
 
 export default class PerfSDK {
   private v = '1.0.0';
-  private reportData: IReportData;
+  /** Reporting transport, exposed so callers can send their own payloads */
+  public readonly reportData: IReportData;
+  /** Present when `captureError` is on; call `.destroy()` to detach the handlers */
+  public readonly errorTrace?: ErrorTrace;
   constructor(options: IPerfOptions = {}) {
     // Extend the base config
     const logUrl = options.logUrl;
@@ -52,8 +55,8 @@ export default class PerfSDK {
 
     if (options.captureError) {
       // Enable error tracking
-      const errorTrace = new ErrorTrace();
-      errorTrace.run();
+      this.errorTrace = new ErrorTrace();
+      this.errorTrace.run();
     }
 
     // Bail out if the browser doesn't support performance metrics
