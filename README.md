@@ -40,7 +40,13 @@ Each metric is scored `good` / `needsImprovement` / `poor` via `helpers/vitalsSc
 - Device: `deviceMemory`, `hardwareConcurrency`, low-end device detection (`isLowEnd.ts`)
 - Storage: offline cache usage via `navigator.storage.estimate()`
 
-**Error monitoring** (enabled via `captureError: true`) — captures sync/async errors via `window.onerror`, and listens to the capture-phase `error` event to catch resource load failures (e.g. 404 images), with sourcemap support to resolve original source locations.
+**Error monitoring** (enabled via `captureError: true`) — three sources, all reported at `IDLE` priority:
+
+- Uncaught sync/async errors via `window.onerror`. The `Error` instance is serialised to `name` / `message` / `stack` first — `JSON.stringify` alone turns it into `{}`. A handler the host page installed earlier is chained, not overwritten.
+- Resource load failures (e.g. a 404 image) via a capture-phase `error` listener on `window` — these never reach `window.onerror`.
+- Unhandled promise rejections. Reported only; the SDK does not `preventDefault()` them, since swallowing them would hide the host app's own errors.
+
+Source locations are resolved on the backend from the reported `scriptURI` / `lineno` / `colno`; see `examples/sourcemap`.
 
 ## Notable implementation details
 
@@ -56,6 +62,7 @@ Each metric is scored `good` / `needsImprovement` / `poor` via `helpers/vitalsSc
 yarn build          # microbundle, outputs ESM / CJS / UMD
 yarn dev            # watch mode
 yarn test           # jest unit tests
+yarn typecheck      # tsc --noEmit
 yarn example:run     # parcel serves examples/index.html
 yarn api:run         # api-extractor generates API report
 yarn api:doc         # typedoc generates docs to docs/
