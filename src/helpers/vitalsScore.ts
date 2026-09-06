@@ -29,6 +29,11 @@ export const getVitalsScore = (
   if (!webVitalsScore[measureName]) {
     return null;
   }
+  // Only the numeric metrics have thresholds; navigation timing and network
+  // information payloads are scored as null.
+  if (typeof value !== 'number') {
+    return null;
+  }
   if (value <= webVitalsScore[measureName][0]) {
     return 'good';
   }
