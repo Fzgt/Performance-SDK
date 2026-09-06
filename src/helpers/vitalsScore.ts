@@ -3,7 +3,7 @@ import { IPerfData, IVitalsScore } from '../typings/types';
 //https://web.dev/vitals/
 const fcpScore = [1000, 2500];
 const lcpScore = [2500, 4000];
-const fidcore = [100, 300];
+const inpScore = [200, 500];
 const clsScore = [0.1, 0.25];
 const tbtScore = [300, 600];
 
@@ -12,8 +12,8 @@ export const webVitalsScore: Record<string, number[]> = {
   fcp: fcpScore,
   lcp: lcpScore,
   lcpFinal: lcpScore,
-  fid: fidcore,
-  fidVitals: fidcore,
+  inp: inpScore,
+  inpFinal: inpScore,
   cls: clsScore,
   clsFinal: clsScore,
   tbt: tbtScore,

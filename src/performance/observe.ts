@@ -2,7 +2,12 @@ import { config } from '../config';
 import { logMetric } from '../data/log';
 import { cls, lcp, tbt } from '../data/metrics';
 import { initLayoutShift } from './cumulativeLayoutShift';
-import { initFirstInputDelay } from './firstInput';
+import { initFirstInteraction } from './firstInteraction';
+import {
+  getInteractionToNextPaint,
+  initInteractionToNextPaint,
+  INP_DURATION_THRESHOLD,
+} from './interactionToNextPaint';
 import { perfObservers } from './observeInstances';
 import {
   initElementTiming,
@@ -13,7 +18,7 @@ import { po, poDisconnect } from './performanceObserver';
 import { initResourceTiming } from './resourceTiming';
 export const initPerformanceObserver = (): void => {
   perfObservers[0] = po('paint', initFirstPaint);
-  perfObservers[1] = po('first-input', initFirstInputDelay);
+  perfObservers[1] = po('first-input', initFirstInteraction);
   perfObservers[2] = po('largest-contentful-paint', initLargestContentfulPaint);
   // Collect all page resource timing data
   if (config.isResourceTiming) {
@@ -23,6 +28,11 @@ export const initPerformanceObserver = (): void => {
   if (config.isElementTiming) {
     po('element', initElementTiming);
   }
+  // INP watches every interaction until the page is hidden, unlike the
+  // one-shot observers above
+  perfObservers[5] = po('event', initInteractionToNextPaint, {
+    durationThreshold: INP_DURATION_THRESHOLD,
+  });
 };
 
 export const disconnectPerfObserversHidden = (): void => {
@@ -40,5 +50,13 @@ export const disconnectPerfObserversHidden = (): void => {
   if (perfObservers[4]) {
     logMetric(tbt.value, `tbtFinal`);
     poDisconnect(4);
+  }
+  if (perfObservers[5]) {
+    const inp = getInteractionToNextPaint();
+    // Stays unreported when the user never interacted with the page
+    if (inp !== null) {
+      logMetric(inp, `inpFinal`);
+    }
+    poDisconnect(5);
   }
 };

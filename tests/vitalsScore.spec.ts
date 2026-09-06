@@ -25,6 +25,13 @@ describe('getVitalsScore', () => {
     expect(getVitalsScore('cls', 0.3)).toBe('poor');
   });
 
+  it('scores INP against its own thresholds', () => {
+    expect(getVitalsScore('inp', 200)).toBe('good');
+    expect(getVitalsScore('inp', 350)).toBe('needsImprovement');
+    expect(getVitalsScore('inp', 501)).toBe('poor');
+    expect(getVitalsScore('inpFinal', 350)).toBe(getVitalsScore('inp', 350));
+  });
+
   it('scores aliased measure names (e.g. lcpFinal) the same as their base metric', () => {
     expect(getVitalsScore('lcpFinal', 2000)).toBe(getVitalsScore('lcp', 2000));
     expect(getVitalsScore('tbtFinal', 700)).toBe('poor');

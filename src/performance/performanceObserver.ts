@@ -1,20 +1,25 @@
 import { C } from '../data/constants';
 import { perfObservers } from './observeInstances';
-import { IPerformanceObserverType } from '../typings/types';
+import {
+  IPerformanceObserverInit,
+  IPerformanceObserverType,
+} from '../typings/types';
 
 /**
  * Async subscription wrapper around PerformanceObserver
  */
 export const po = (
   eventType: IPerformanceObserverType,
-  cb: (performanceEntries: any[]) => void
+  cb: (performanceEntries: any[]) => void,
+  // Entry-type specific options, e.g. durationThreshold for `event`
+  options: IPerformanceObserverInit = {}
 ): PerformanceObserver | null => {
   try {
     const perfObserver = new PerformanceObserver((entryList) => {
       cb(entryList.getEntries());
     });
     // buffered: true replays entries recorded before this observer was created
-    perfObserver.observe({ type: eventType, buffered: true });
+    perfObserver.observe({ ...options, type: eventType, buffered: true });
     return perfObserver;
   } catch (e) {
     C.warn('PerfSDK.js:', e);

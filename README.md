@@ -26,7 +26,7 @@ The constructor is the entry point — instantiating with `new` starts collectio
 | -------- | ----------------------------------------------- | ----------------- |
 | FP / FCP | First Paint / First Contentful Paint            | 1000 / 2500ms     |
 | LCP      | Largest Contentful Paint                        | 2500 / 4000ms     |
-| FID      | First Input Delay                               | 100 / 300ms       |
+| INP      | Interaction to Next Paint                       | 200 / 500ms       |
 | CLS      | Cumulative Layout Shift                          | 0.1 / 0.25         |
 | TBT      | Total Blocking Time (includes 5s / 10s / final segments) | 300 / 600ms |
 
@@ -51,6 +51,8 @@ Source locations are resolved on the backend from the reported `scriptURI` / `li
 ## Notable implementation details
 
 **Report prioritisation** (`data/ReportData.ts`) — reports are tiered via `AskPriority`: `URGENT` uses `fetch(..., { keepalive: true })`, falling back to XHR if unsupported; `IDLE` reports during idle time. This is the standard approach for ensuring data gets sent out even as the page is being unloaded.
+
+**INP over FID** (`performance/interactionToNextPaint.ts`) — INP replaced FID as a Core Web Vital in March 2024, and it is measured differently: instead of a single number available right after the first input, every interaction is observed until the page is hidden. Events sharing an `interactionId` are grouped into one interaction (a click fires `pointerdown`, `pointerup` and `click`) and only its slowest event is kept; the reported value is the slowest interaction, allowing one outlier to be discarded per 50 interactions, so a single unlucky interaction doesn't define the score. The count comes from `performance.interactionCount` when the browser exposes it, since the SDK itself only retains the ten slowest interactions. A provisional `inp` is reported at the first interaction and the settled `inpFinal` when the page is hidden. The `first-input` observer is still registered, but only as the trigger for reporting the load-time metrics.
 
 **Lifecycle management** (`performance/observe.ts`) — listens to `visibilitychange` and disconnects observers/finalises metrics when the page is hidden. Performance data needs to be settled before the page hides — waiting for `unload` is too late.
 

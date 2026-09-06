@@ -93,6 +93,7 @@ export interface IPerfObservers {
 }
 // Performance entry types
 export type IPerformanceObserverType =
+  | 'event'
   | 'first-input'
   | 'largest-contentful-paint'
   | 'layout-shift'
@@ -131,7 +132,15 @@ export interface IMetricMap {
 // https://wicg.github.io/event-timing/#sec-performance-event-timing
 export interface PerformanceEventTiming extends PerformanceEntry {
   processingStart: DOMHighResTimeStamp;
+  // Shared by every event belonging to the same user interaction.
+  // Absent on events that aren't part of one.
+  interactionId?: number;
   target?: Node;
+}
+// PerformanceObserverInit plus durationThreshold, which the DOM lib
+// still doesn't declare
+export interface IPerformanceObserverInit extends PerformanceObserverInit {
+  durationThreshold?: number;
 }
 // Reporting priority
 export enum AskPriority {
