@@ -1,5 +1,5 @@
 import { config } from '../src/config';
-import ErrorTrace from '../src/error/Index';
+import ErrorTrace from '../src/error';
 import { AskPriority } from '../src/typings/types';
 
 describe('ErrorTrace', () => {
